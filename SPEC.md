@@ -165,13 +165,34 @@ POST /api/auth/logout            → Logout
 // Alert
 {
   id: string;
-  type: 'fall' | 'abnormal' | 'sos' | 'medical' | 'system';
+  type: 'fall' | 'abnormal' | 'sos' | 'medical' | 'system' | 'medication' | 'wander' | 'vital' | 'voice' | 'thermal';
   severity: 'info' | 'warning' | 'critical';
+  riskLevel: 'HIGH' | 'MEDIUM' | 'LOW';
+  status: 'new' | 'acknowledged' | 'in_progress' | 'resolved' | 'dismissed';
+  title: string;
   message: string;
-  residentId: string;
-  residentName: string;
-  timestamp: string;
-  acknowledged: boolean;
+  description?: string;
+  elderId: string;
+  elderName: string;
+  elderAvatar?: string;
+  elderAge?: number;
+  elderRoom?: string;
+  familyId: string;
+  familyName: string;
+  familyContact?: string;
+  deviceId: string;
+  deviceName: string;
+  deviceType?: string;
+  deviceLocation?: string;
+  confidence?: number;
+  createdAt: string;
+  acknowledgedAt?: string;
+  resolvedAt?: string;
+  acknowledgedBy?: string;
+  resolvedBy?: string;
+  actions?: { id: string; label: string; timestamp: string; actor: string }[];
+  snapshot?: string;
+  snapshotCaption?: string;
 }
 ```
 

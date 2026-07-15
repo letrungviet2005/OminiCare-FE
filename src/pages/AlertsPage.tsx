@@ -10,6 +10,7 @@ import { AlertTable, type AlertSortDir, type AlertSortKey } from '@/components/a
 import { AlertPagination } from '@/components/alerts/AlertPagination'
 import { AlertDetailDrawer } from '@/components/alerts/AlertDetailDrawer'
 import { riskLevelConfig } from '@/components/alerts/alertMeta'
+import { useToast } from '@/components/ui/toast'
 import type { Alert, AlertRiskLevel, AlertStatus } from '@/types'
 
 const initialFilters: AlertFilterState = {
@@ -29,6 +30,7 @@ export function AlertsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const queryClient = useQueryClient()
+  const toast = useToast()
 
   const queryKey = useMemo(
     () => ['alerts-list', { ...filters, page, pageSize, sortKey, sortDir }],
@@ -56,18 +58,28 @@ export function AlertsPage() {
 
   const acknowledgeMutation = useMutation({
     mutationFn: (id: string) => alertService.acknowledge(id),
-    onSuccess: () => {
+    onSuccess: (updated, id) => {
       queryClient.invalidateQueries({ queryKey: ['alerts-list'] })
       queryClient.invalidateQueries({ queryKey: ['alert-stats'] })
+      toast.success(
+        'Đã xác nhận cảnh báo',
+        updated ? `${updated.id} · ${updated.title}` : `Mã ${id} đã được tiếp nhận.`
+      )
     },
+    onError: () => toast.error('Không thể xác nhận', 'Vui lòng thử lại sau.'),
   })
 
   const resolveMutation = useMutation({
     mutationFn: (id: string) => alertService.resolve(id),
-    onSuccess: () => {
+    onSuccess: (updated, id) => {
       queryClient.invalidateQueries({ queryKey: ['alerts-list'] })
       queryClient.invalidateQueries({ queryKey: ['alert-stats'] })
+      toast.success(
+        'Đã đóng cảnh báo',
+        updated ? `${updated.id} · ${updated.title}` : `Mã ${id} đã được xử lý xong.`
+      )
     },
+    onError: () => toast.error('Không thể đóng cảnh báo', 'Vui lòng thử lại sau.'),
   })
 
   useEffect(() => {
@@ -85,6 +97,12 @@ export function AlertsPage() {
   const onRowClick = (a: Alert) => {
     setDrawerId(a.id)
     setDrawerOpen(true)
+    toast.show({
+      title: `Đã mở chi tiết ${a.title}`,
+      description: `${a.elderName} · Phòng ${a.elderRoom || '—'} · ${a.deviceName}`,
+      variant: a.riskLevel === 'HIGH' ? 'destructive' : 'info',
+      duration: 3500,
+    })
   }
 
   const handleSort = (k: AlertSortKey) => onSort(k)
@@ -127,6 +145,7 @@ export function AlertsPage() {
             onClick={() => {
               queryClient.invalidateQueries({ queryKey: ['alerts-list'] })
               queryClient.invalidateQueries({ queryKey: ['alert-stats'] })
+              toast.info('Đang làm mới dữ liệu', 'Đồng bộ danh sách cảnh báo mới nhất.')
             }}
             disabled={isFetching}
           >
@@ -245,8 +264,12 @@ export function AlertsPage() {
           sortDir={sortDir}
           onSort={handleSort}
           onRowClick={onRowClick}
-          onAcknowledge={(a) => acknowledgeMutation.mutate(a.id)}
-          onResolve={(a) => resolveMutation.mutate(a.id)}
+          onAcknowledge={(a) => {
+            acknowledgeMutation.mutate(a.id)
+          }}
+          onResolve={(a) => {
+            resolveMutation.mutate(a.id)
+          }}
         />
 
         <AlertPagination

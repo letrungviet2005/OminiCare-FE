@@ -115,10 +115,14 @@ export const mockFamilies: FamilyRef[] = [
 export const mockDevices: DeviceRef[] = [
   { id: 'CAM-001', name: 'Camera Phòng 201', type: 'Camera AI', location: 'Phòng 201', elderId: '1' },
   { id: 'CAM-002', name: 'Camera Phòng 105', type: 'Camera AI', location: 'Phòng 105', elderId: '2' },
-  { id: 'CAM-003', name: 'Camera Phòng 302', type: 'Camera AI', location: 'Phòng 302', elderId: '3' },
-  { id: 'CAM-004', name: 'Camera Phòng 108', type: 'Camera AI', location: 'Phòng 108', elderId: '4' },
+  { id: 'CAM-003', name: 'Camera Phòng 302', type: 'Camera AI + Thermal', location: 'Phòng 302', elderId: '3' },
+  { id: 'CAM-004', name: 'Camera Phòng 108', type: 'Camera AI + Audio', location: 'Phòng 108', elderId: '4' },
   { id: 'CAM-005', name: 'Camera Hành lang T2', type: 'Camera AI', location: 'Hành lang tầng 2' },
   { id: 'CAM-006', name: 'Camera Phòng 310', type: 'Camera AI', location: 'Phòng 310', elderId: '6' },
+  { id: 'CAM-THERM-001', name: 'Camera AI + Thermal 2in1 Phòng 201', type: 'Camera AI + Thermal', location: 'Phòng 201', elderId: '1' },
+  { id: 'CAM-AUDIO-004', name: 'Camera AI + Audio Phòng 108', type: 'Camera AI + Audio', location: 'Phòng 108', elderId: '4' },
+  { id: 'THERM-001', name: 'Camera Nhiệt Phòng 302', type: 'Thermal Camera', location: 'Phòng 302', elderId: '3' },
+  { id: 'THERM-HALL-002', name: 'Camera Nhiệt Hành lang T2', type: 'Thermal Camera', location: 'Hành lang tầng 2' },
   { id: 'SOS-001', name: 'Nút SOS cầm tay', type: 'SOS Button', location: 'Đeo tay', elderId: '6' },
   { id: 'WRIST-002', name: 'Vòng tay sức khỏe', type: 'Wearable', location: 'Đeo tay', elderId: '3' },
   { id: 'BED-002', name: 'Cảm biến giường', type: 'Bed Sensor', location: 'Phòng 105', elderId: '2' },
@@ -129,6 +133,8 @@ const alertTypeMeta: Record<AlertType, { risk: AlertRiskLevel; severity: AlertSe
   fall: { risk: 'HIGH', severity: 'critical', title: 'Phát hiện té ngã' },
   sos: { risk: 'HIGH', severity: 'critical', title: 'Tín hiệu SOS khẩn cấp' },
   medical: { risk: 'HIGH', severity: 'critical', title: 'Cảnh báo y tế khẩn cấp' },
+  voice: { risk: 'HIGH', severity: 'critical', title: 'Tiếng kêu cứu được phát hiện' },
+  thermal: { risk: 'HIGH', severity: 'critical', title: 'Nhiệt độ bất thường qua camera nhiệt' },
   abnormal: { risk: 'MEDIUM', severity: 'warning', title: 'Hoạt động bất thường' },
   wander: { risk: 'MEDIUM', severity: 'warning', title: 'Đi lang thang bất thường' },
   vital: { risk: 'MEDIUM', severity: 'warning', title: 'Dấu hiệu sinh tồn bất thường' },
@@ -237,6 +243,110 @@ const baseAlerts: Array<Omit<Alert, 'riskLevel' | 'severity' | 'status' | 'title
     deviceLocation: 'Đeo tay',
     confidence: 100,
     createdAt: minutesAgo(35),
+  },
+  {
+    id: 'AL-2419',
+    type: 'voice',
+    message: 'Tiếng kêu "cứu" được AI phát hiện - confidence 94%',
+    description:
+      'Camera AI phòng 201 phát hiện giọng nói bất thường lúc 21:15. Mô hình VoiceAI nhận diện tiếng kêu "cứu" với biên độ 87dB vượt ngưỡng cảnh báo. Hệ thống đã tự động phát loa cảnh báo trong phòng và thông báo tới 2 người thân trong vòng 8 giây.',
+    elderId: '1',
+    elderName: 'Nguyễn Thị Lan',
+    elderAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&h=120&fit=crop',
+    elderAge: 78,
+    elderRoom: '201',
+    familyId: 'F-002',
+    familyName: 'Gia đình bà Lan',
+    familyContact: '0912 345 678',
+    deviceId: 'CAM-THERM-001',
+    deviceName: 'Camera AI + Thermal 2in1',
+    deviceType: 'Camera AI + Thermal',
+    deviceLocation: 'Phòng 201',
+    confidence: 94,
+    createdAt: minutesAgo(8),
+  },
+  {
+    id: 'AL-2420',
+    type: 'thermal',
+    message: 'Nhiệt độ bề mặt cơ thể 39.2°C - vượt ngưỡng sốt',
+    description:
+      'Camera nhiệt phát hiện nhiệt độ bề mặt cơ thể người cao tuổi đạt 39.2°C tại vùng trán, vượt ngưỡng sốt WHO (38°C). Mô hình ThermalAI phân tích hình ảnh nhiệt với confidence 91%. Điều dưỡng đã được thông báo và kiểm tra tại giường.',
+    elderId: '3',
+    elderName: 'Phạm Thị Hương',
+    elderAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop',
+    elderAge: 75,
+    elderRoom: '302',
+    familyId: 'F-003',
+    familyName: 'Gia đình bà Hương',
+    familyContact: '0938 111 222',
+    deviceId: 'THERM-001',
+    deviceName: 'Camera Nhiệt Phòng 302',
+    deviceType: 'Thermal Camera',
+    deviceLocation: 'Phòng 302',
+    confidence: 91,
+    createdAt: minutesAgo(20),
+    acknowledgedAt: minutesAgo(18),
+    acknowledgedBy: 'Điều dưỡng Hoa',
+    actions: [
+      { id: 'a1', label: 'Thông báo gia đình', timestamp: minutesAgo(19), actor: 'Hệ thống' },
+      { id: 'a2', label: 'Đo thực tế tại giường', timestamp: minutesAgo(17), actor: 'Điều dưỡng Hoa' },
+    ],
+  },
+  {
+    id: 'AL-2421',
+    type: 'voice',
+    message: 'Tiếng rên rỉ bất thường - AI confidence 89%',
+    description:
+      'Microphone AI phát hiện chuỗi âm thanh rên rỉ liên tục trong phòng 108 kéo dài 3 phút. Mô hình VoiceAI xác định đây là tiếng kêu gọi giúp đỡ với probability 89%. Người thân đã được gọi điện thông báo.',
+    elderId: '4',
+    elderName: 'Lê Văn Tuấn',
+    elderAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop',
+    elderAge: 80,
+    elderRoom: '108',
+    familyId: 'F-004',
+    familyName: 'Gia đình ông Tuấn',
+    familyContact: '0977 888 555',
+    deviceId: 'CAM-AUDIO-004',
+    deviceName: 'Camera AI + Audio Phòng 108',
+    deviceType: 'Camera AI + Audio',
+    deviceLocation: 'Phòng 108',
+    confidence: 89,
+    createdAt: hoursAgo(1),
+    acknowledgedAt: hoursAgo(55),
+    acknowledgedBy: 'Điều dưỡng Minh',
+    resolvedAt: hoursAgo(50),
+    resolvedBy: 'Điều dưỡng Minh',
+    actions: [
+      { id: 'a1', label: 'Gọi điện gia đình', timestamp: hoursAgo(55), actor: 'Hệ thống' },
+      { id: 'a2', label: 'Kiểm tra tại phòng', timestamp: hoursAgo(53), actor: 'Điều dưỡng Minh' },
+    ],
+  },
+  {
+    id: 'AL-2422',
+    type: 'thermal',
+    message: 'Nhiệt độ phòng tăng đột ngột 5°C trong 30 phút - có thể cháy',
+    description:
+      'Camera nhiệt hành lang tầng 2 ghi nhận nhiệt độ môi trường tăng từ 26°C lên 31°C trong 30 phút. Khu vực gần phòng 205 có điểm nóng 42°C. Đã kích hoạt báo cháy và sơ tán cư dân.',
+    elderId: '5',
+    elderName: 'Hoàng Thị Mai',
+    elderAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop',
+    elderAge: 76,
+    elderRoom: '205',
+    familyId: 'F-005',
+    familyName: 'Gia đình bà Mai',
+    familyContact: '0966 222 333',
+    deviceId: 'THERM-HALL-002',
+    deviceName: 'Camera Nhiệt Hành lang T2',
+    deviceType: 'Thermal Camera',
+    deviceLocation: 'Hành lang tầng 2',
+    confidence: 96,
+    createdAt: hoursAgo(3),
+    acknowledgedAt: hoursAgo(3),
+    acknowledgedBy: 'Bảo vệ Lâm',
+    actions: [
+      { id: 'a1', label: 'Kích hoạt báo cháy', timestamp: hoursAgo(3), actor: 'Hệ thống' },
+      { id: 'a2', label: 'Sơ tán cư dân tầng 2', timestamp: hoursAgo(2), actor: 'Bảo vệ Lâm' },
+    ],
   },
   {
     id: 'AL-2405',
@@ -583,14 +693,103 @@ function inferStatus(a: { acknowledgedAt?: string; resolvedAt?: string }, explic
   return 'new'
 }
 
+const snapshotPool: Record<AlertType, { url: string; caption: string }[]> = {
+  fall: [
+    {
+      url: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=720&h=420&fit=crop',
+      caption: 'Khung hình AI phát hiện tư thế té ngã - camera hồng ngoại',
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1559757175-08fdaacf5e2a?w=720&h=420&fit=crop',
+      caption: 'AI bounding box khoanh vùng người cao tuổi trên sàn',
+    },
+  ],
+  sos: [
+    {
+      url: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=720&h=420&fit=crop',
+      caption: 'Tín hiệu SOS nhận từ thiết bị đeo tay',
+    },
+  ],
+  medical: [
+    {
+      url: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=720&h=420&fit=crop',
+      caption: 'Đồ thị nhịp tim & SpO2 tại thời điểm phát cảnh báo',
+    },
+  ],
+  vital: [
+    {
+      url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=720&h=420&fit=crop',
+      caption: 'Xu hướng chỉ số sinh tồn 24 giờ qua',
+    },
+  ],
+  abnormal: [
+    {
+      url: 'https://images.unsplash.com/photo-1559757175-08fdaacf5e2a?w=720&h=420&fit=crop',
+      caption: 'Phân tích heatmap khu vực hoạt động',
+    },
+  ],
+  wander: [
+    {
+      url: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=720&h=420&fit=crop',
+      caption: 'Hành trình di chuyển ngoài khung giờ bình thường',
+    },
+  ],
+  medication: [
+    {
+      url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=720&h=420&fit=crop',
+      caption: 'Lịch uống thuốc hôm nay - đã xác nhận',
+    },
+  ],
+  voice: [
+    {
+      url: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=720&h=420&fit=crop',
+      caption: 'Waveform giọng nói - phổ tần số kêu cứu được phát hiện',
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=720&h=420&fit=crop',
+      caption: 'Đồ thị âm thanh - biên độ tiếng kêu cứu vượt ngưỡng 85dB',
+    },
+  ],
+  thermal: [
+    {
+      url: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=720&h=420&fit=crop',
+      caption: 'Camera nhiệt - phân bố nhiệt độ bề mặt cơ thể người',
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=720&h=420&fit=crop',
+      caption: 'Bản đồ nhiệt - vùng nhiệt độ cao bất thường trên 38.5°C',
+    },
+  ],
+  system: [
+    {
+      url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=720&h=420&fit=crop',
+      caption: 'Trạng thái kết nối của hệ thống',
+    },
+  ],
+}
+
+const fallbackSnapshot = {
+  url: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=720&h=420&fit=crop',
+  caption: 'Ảnh chụp từ camera tại thời điểm phát cảnh báo',
+}
+
+const pickSnapshot = (type: AlertType, id: string) => {
+  const pool = snapshotPool[type] || [fallbackSnapshot]
+  const idx = Math.abs(id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)) % pool.length
+  return pool[idx]
+}
+
 export const mockAlerts: Alert[] = baseAlerts.map((a) => {
   const meta = alertTypeMeta[a.type]
+  const snap = pickSnapshot(a.type, a.id)
   return {
     ...a,
     title: meta.title,
     riskLevel: meta.risk,
     severity: meta.severity,
     status: inferStatus(a, (a as { status?: AlertStatus }).status),
+    snapshot: snap.url,
+    snapshotCaption: snap.caption,
   }
 })
 

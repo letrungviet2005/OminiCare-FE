@@ -14,7 +14,7 @@ export interface Resident {
   }
 }
 
-export type AlertType = 'fall' | 'abnormal' | 'sos' | 'medical' | 'system' | 'medication' | 'wander' | 'vital'
+export type AlertType = 'fall' | 'abnormal' | 'sos' | 'medical' | 'system' | 'medication' | 'wander' | 'vital' | 'voice' | 'thermal'
 export type AlertSeverity = 'info' | 'warning' | 'critical'
 export type AlertRiskLevel = 'HIGH' | 'MEDIUM' | 'LOW'
 export type AlertStatus = 'new' | 'acknowledged' | 'in_progress' | 'resolved' | 'dismissed'
@@ -47,6 +47,8 @@ export interface Alert {
   acknowledgedBy?: string
   resolvedBy?: string
   actions?: { id: string; label: string; timestamp: string; actor: string }[]
+  snapshot?: string
+  snapshotCaption?: string
 }
 
 export interface AlertListParams {

@@ -30,6 +30,8 @@ const typeOptions: { value: AlertType | 'all'; label: string }[] = [
   { value: 'fall', label: 'Té ngã' },
   { value: 'sos', label: 'SOS' },
   { value: 'medical', label: 'Y tế' },
+  { value: 'voice', label: 'Kêu cứu' },
+  { value: 'thermal', label: 'Nhiệt độ' },
   { value: 'vital', label: 'Sinh tồn' },
   { value: 'abnormal', label: 'Bất thường' },
   { value: 'wander', label: 'Đi lang thang' },

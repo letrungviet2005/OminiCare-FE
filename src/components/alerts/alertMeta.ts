@@ -7,6 +7,8 @@ import {
   PowerOff,
   Footprints,
   Stethoscope,
+  Mic,
+  Thermometer,
   type LucideIcon,
 } from 'lucide-react'
 import type { AlertRiskLevel, AlertStatus, AlertType } from '@/types'
@@ -56,6 +58,8 @@ export const alertTypeConfig: Record<
   fall: { label: 'Té ngã', icon: AlertOctagon, tone: 'text-red-500 bg-red-500/10 border-red-500/20' },
   sos: { label: 'SOS', icon: PowerOff, tone: 'text-red-500 bg-red-500/10 border-red-500/20' },
   medical: { label: 'Y tế', icon: Stethoscope, tone: 'text-red-500 bg-red-500/10 border-red-500/20' },
+  voice: { label: 'Kêu cứu', icon: Mic, tone: 'text-red-500 bg-red-500/10 border-red-500/20' },
+  thermal: { label: 'Nhiệt độ', icon: Thermometer, tone: 'text-red-500 bg-red-500/10 border-red-500/20' },
   vital: { label: 'Sinh tồn', icon: HeartPulse, tone: 'text-amber-500 bg-amber-500/10 border-amber-500/20' },
   abnormal: { label: 'Bất thường', icon: AlertTriangle, tone: 'text-amber-500 bg-amber-500/10 border-amber-500/20' },
   wander: { label: 'Đi lang thang', icon: Footprints, tone: 'text-amber-500 bg-amber-500/10 border-amber-500/20' },

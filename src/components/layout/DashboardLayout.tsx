@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
+import { ToastHost } from '@/components/ui/toast'
 import { cn } from '@/lib/utils'
 import { Heart, Cpu, Wifi, Shield, Clock } from 'lucide-react'
 
@@ -12,18 +13,19 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <Sidebar
-        collapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
-      
-      <div
-        className={cn(
-          'flex flex-col min-h-screen transition-all duration-300',
-          sidebarCollapsed ? 'ml-[72px]' : 'ml-[260px]'
-        )}
-      >
+    <ToastHost>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+        <Sidebar
+          collapsed={sidebarCollapsed}
+          onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+        />
+
+        <div
+          className={cn(
+            'flex flex-col min-h-screen transition-all duration-300',
+            sidebarCollapsed ? 'ml-[72px]' : 'ml-[260px]'
+          )}
+        >
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
           <Topbar />
@@ -95,6 +97,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </footer>
         </div>
       </div>
-    </div>
+      </div>
+    </ToastHost>
   )
 }
