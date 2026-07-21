@@ -110,7 +110,6 @@
     display: none;
   }
 
-  /* Custom scrollbar for light mode */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
