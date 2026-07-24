@@ -152,7 +152,6 @@ export function AlertDetailDrawer({
             </SheetHeader>
 
             <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
-              {/* Description */}
               {alert.description && (
                 <section>
                   <SectionTitle icon={AlertCircle}>Mô tả chi tiết</SectionTitle>
